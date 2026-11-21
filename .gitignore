@@ -1,0 +1,15 @@
+# Compiled build output
+build/
+*.exe
+*.dll
+*.obj
+*.lib
+*.exp
+*.pdb
+
+# Runtime logs & local configs
+extracted_videos/
+save_files/
+temp_files/
+runner_log.txt
+controls.ini
