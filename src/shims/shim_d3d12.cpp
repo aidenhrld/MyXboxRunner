@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <gdiplus.h>
+#include "ui_prompts.h"
 #include <dxgi1_6.h>
 #include <iostream>
 #include <string>
@@ -7,6 +8,7 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "gdi32.lib")
+#pragma comment(lib, "gdiplus.lib")
 
 using namespace Gdiplus;
 
@@ -49,7 +51,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
 extern "C" {
 
-    // 1. DirectX 12 Device Forwarder (No d3d12.h dllimport conflict!)
     __declspec(dllexport) HRESULT WINAPI D3D12CreateDevice(
         IUnknown* pAdapter,
         int MinimumFeatureLevel,
@@ -65,20 +66,19 @@ extern "C" {
         return realCreateDevice(pAdapter, MinimumFeatureLevel, riid, ppDevice);
     }
 
-    // 2. DirectX 12 Debug Interface Stub
     __declspec(dllexport) HRESULT WINAPI D3D12GetDebugInterface(REFIID riid, void** ppvDebug) {
         std::cout << "[shim_d3d12.dll] Game called D3D12GetDebugInterface -> Disabled (Retail Mode)" << std::endl;
         if (ppvDebug) *ppvDebug = nullptr;
         return E_NOINTERFACE;
     }
 
-    // 3. Opens the Game Window & Shows Boot Splash Screen
     __declspec(dllexport) bool D3D12CreateXboxDisplay(int width, int height) {
         EnsureNativeD3D12Loaded();
         std::cout << "[shim_d3d12.dll] Creating " << width << "x" << height << " Xbox display window..." << std::endl;
 
         GdiplusStartupInput gdiplusStartupInput;
         GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
+        GenerateDynamicPCPrompts();
 
         const wchar_t* splashPath = L"C:\\Users\\aiden\\Downloads\\Grand Theft Auto VI\\xbs_splash.png";
         splashImage = new Image(splashPath);
