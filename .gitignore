@@ -13,3 +13,4 @@ save_files/
 temp_files/
 runner_log.txt
 controls.ini
+ui_overrides/
