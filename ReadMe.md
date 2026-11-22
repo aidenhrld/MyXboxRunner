@@ -20,6 +20,13 @@ A modular C++17 High-Level Emulation (HLE) compatibility layer and 64-bit PE loa
 
 ---
 
+
+
+> **Note on the Boot Splash Screen:** When running `loader.exe main.exe`, `shim_d3d12.dll` renders `xbs_splash.png` from your local package directory as a **placeholder display test** to verify window creation and GDI+/DirectX 12 initialization. The actual game engine does not boot yet—full rendering and gameplay require `game_scarlett_master.exe` to trace and implement the remaining `d3d12_xs` and GDK calls.
+
+
+
+
 ## Repository Structure
 
 ```text
